@@ -2,7 +2,7 @@ package com.compra.operador.controlador;
 
 import com.compra.operador.modelo.request.CompraRequest;
 import com.compra.operador.modelo.response.CompraResponse;
-import com.compra.operador.modelo.response.ConsultaResponseById;
+import com.compra.operador.modelo.response.CompraCompleta;
 import com.compra.operador.servicio.CompraServicio;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,17 +14,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class CompraControlador {
     private final CompraServicio servicio;
-    @GetMapping("ping")
-    public String ping(){
-        return "pong";
-    }
 
-    @PostMapping("/venta")
+    @PostMapping("/compras")
     @Operation(
             operationId = "Insertar una venta",
             description = "Operacion de escritura",
@@ -52,19 +51,41 @@ public class CompraControlador {
             return ResponseEntity.badRequest().build();
         }
     }
-    @GetMapping("/compra/{idCompra}")
+
+    @GetMapping("/compras")
     @Operation(operationId = "Obtener la compra",
             description = "Operacion de lectura",
             summary = "Se devuelve la compra realizada a partir de su identificador.")
     @ApiResponse(
             responseCode = "200",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ConsultaResponseById.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CompraCompleta.class)))
     @ApiResponse(
             responseCode = "404",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class)),
             description = "No se ha encontrado la compra con el identificador indicado.")
-    public ResponseEntity<ConsultaResponseById> getCompra(@PathVariable Long idCompra){
-        ConsultaResponseById consultaCompra = servicio.getCompra(idCompra);
+    public ResponseEntity<List<CompraCompleta>> getOrders() {
+
+        List<CompraCompleta> compras = servicio.getCompra();
+        if (compras != null) {
+            return ResponseEntity.ok(compras);
+        } else {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/compras/{idCompra}")
+    @Operation(operationId = "Obtener la compra",
+            description = "Operacion de lectura",
+            summary = "Se devuelve la compra realizada a partir de su identificador.")
+    @ApiResponse(
+            responseCode = "200",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CompraCompleta.class)))
+    @ApiResponse(
+            responseCode = "404",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class)),
+            description = "No se ha encontrado la compra con el identificador indicado.")
+    public ResponseEntity<CompraCompleta> getCompra(@PathVariable Long idCompra){
+        CompraCompleta consultaCompra = servicio.getCompra(idCompra);
         if (consultaCompra != null) {
             return ResponseEntity.ok(consultaCompra);
         } else {

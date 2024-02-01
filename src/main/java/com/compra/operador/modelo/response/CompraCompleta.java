@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ConsultaResponseById {
+public class CompraCompleta {
     private Compra compra;
     private List<CompraDetalle> detalle;
 }

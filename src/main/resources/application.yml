@@ -1,14 +1,11 @@
 ## Configuracion de Spring
 spring:
   application:
-    name: ms-operador
+    name: ms-operador-compras
   datasource:
-    url: jdbc:h2:mem:testdb;Mode=MySQL
+    url: jdbc:h2:mem:comprasdb
   jpa:
     show-sql: true
-    hibernate:
-      ddl-auto: create-drop
-    defer-datasource-initialization: true
   h2:
     console:
       enabled: true
@@ -18,5 +15,15 @@ spring:
 
 ## Configuracion de Instancia
 server:
-  port: 8085
+  port: 8082
+
+## Configuracion del cliente de Eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+    hostname: ms-operador-compras
+
 

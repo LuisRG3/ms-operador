@@ -5,10 +5,11 @@ import com.compra.operador.data.utils.SearchOperation;
 import com.compra.operador.data.utils.SearchStatement;
 import com.compra.operador.modelo.basedatos.Compra;
 import com.compra.operador.modelo.basedatos.CompraDetalle;
-import com.compra.operador.modelo.response.ConsultaResponseById;
+import com.compra.operador.modelo.response.CompraCompleta;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,8 +25,8 @@ public class CompraRepository {
         return repositoryDetalle.save(compraDetalle);
     }
 
-    public ConsultaResponseById getById(Long id) {
-        ConsultaResponseById resultado = new ConsultaResponseById();
+    public CompraCompleta getById(Long id) {
+        CompraCompleta resultado = new CompraCompleta();
         Compra encabezado = repository.findById(id).orElse(null);
         if (Objects.nonNull(encabezado)){
             SearchCriteria<CompraDetalle> spec = new SearchCriteria<>();
@@ -33,6 +34,25 @@ public class CompraRepository {
             List<CompraDetalle> listaDetalles = repositoryDetalle.findAll(spec);
             resultado.setCompra(encabezado);
             resultado.setDetalle(listaDetalles);
+            return resultado;
+        }else{
+            return null;
+        }
+    }
+
+    public List<CompraCompleta> findAllCompras() {
+        List<CompraCompleta> resultado = new ArrayList<>();
+        List<Compra> compras = repository.findAll();
+        if (!compras.isEmpty()){
+            for (Compra compraUnica : compras) {
+                CompraCompleta compratotal = new CompraCompleta();
+                SearchCriteria<CompraDetalle> spec = new SearchCriteria<>();
+                spec.add(new SearchStatement("idCompra", compraUnica.getId(), SearchOperation.EQUAL));
+                List<CompraDetalle> listaDetalles = repositoryDetalle.findAll(spec);
+                compratotal.setCompra(compraUnica);
+                compratotal.setDetalle(listaDetalles);
+                resultado.add(compratotal);
+            }
             return resultado;
         }else{
             return null;

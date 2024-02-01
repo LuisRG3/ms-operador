@@ -6,11 +6,13 @@ import com.compra.operador.modelo.basedatos.Compra;
 import com.compra.operador.modelo.basedatos.CompraDetalle;
 import com.compra.operador.modelo.request.CompraRequest;
 import com.compra.operador.modelo.response.CompraResponse;
-import com.compra.operador.modelo.response.ConsultaResponseById;
+import com.compra.operador.modelo.response.CompraCompleta;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -18,7 +20,7 @@ public class CompraServicioImpl implements CompraServicio {
     @Autowired
     private CompraRepository repository;
     @Override
-    public Compra validarRequest(CompraRequest request) {
+    public com.compra.operador.modelo.basedatos.Compra validarRequest(CompraRequest request) {
         return null;
     }
 
@@ -39,7 +41,7 @@ public class CompraServicioImpl implements CompraServicio {
             resultadoCompra = repository.guardarEncabezado(compra);
             if (!request.getDetalles().isEmpty()){
                 for (Detalle det : request.getDetalles()){
-                    if ( det.getCantidad() > 0 && det.getValorTotal() > 0 && det.getValorUnitario() > 0 && det.getIdProducto() > 0 && det.getIdProducto() > 0){
+                    if ( det.getCantidad() > 0 && det.getValorTotal() > 0 && det.getValorUnitario() > 0 && det.getIdProducto() > 0 ){
                         CompraDetalle detalle = CompraDetalle.builder().idCompra(resultadoCompra.getId()).cantidad(det.getCantidad()).valorUnitario(det.getValorUnitario()).valorTotal(det.getValorTotal()).
                                 idProducto(det.getIdProducto()).build();
                         compraDetalle = repository.guardarDetalle(detalle);
@@ -57,11 +59,17 @@ public class CompraServicioImpl implements CompraServicio {
     }
 
     @Override
-    public ConsultaResponseById getCompra(Long idCompra) {
-        ConsultaResponseById consultaResponseById = new ConsultaResponseById();
+    public CompraCompleta getCompra(Long idCompra) {
+        CompraCompleta consultaResponseById = new CompraCompleta();
         consultaResponseById = repository.getById(idCompra);
 
         return consultaResponseById;
+    }
+
+    @Override
+    public List<CompraCompleta> getCompra() {
+        List<CompraCompleta> orders = repository.findAllCompras();
+        return orders.isEmpty() ? null : orders;
     }
 
 
