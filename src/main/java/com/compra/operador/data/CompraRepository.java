@@ -29,8 +29,7 @@ public class CompraRepository {
         Compra encabezado = repository.findById(id).orElse(null);
         if (Objects.nonNull(encabezado)){
             SearchCriteria<CompraDetalle> spec = new SearchCriteria<>();
-            Long idCompra = 1L;
-            spec.add(new SearchStatement("idCompra", idCompra, SearchOperation.EQUAL));
+            spec.add(new SearchStatement("idCompra", encabezado.getId(), SearchOperation.EQUAL));
             List<CompraDetalle> listaDetalles = repositoryDetalle.findAll(spec);
             resultado.setCompra(encabezado);
             resultado.setDetalle(listaDetalles);
