@@ -55,7 +55,7 @@ public class CompraControlador {
     @GetMapping("/compras")
     @Operation(operationId = "Obtener la compra",
             description = "Operacion de lectura",
-            summary = "Se devuelve la compra realizada a partir de su identificador.")
+            summary = "Se devuelve el total de compras.")
     @ApiResponse(
             responseCode = "200",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CompraCompleta.class)))

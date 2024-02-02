@@ -13,6 +13,6 @@ public class Detalle {
     private Long idCompra;
     private Long idProducto;
     private Float valorUnitario;
-    private Long cantidad;
+    private Integer cantidad;
     private Float valorTotal;
 }

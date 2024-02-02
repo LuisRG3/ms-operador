@@ -26,4 +26,7 @@ eureka:
     preferIpAddress: true
     hostname: ms-operador-compras
 
+## Configuracion secundaria (custom)
+getProduct:
+  url: http://ms-buscador-products/products/%s
 

@@ -17,7 +17,7 @@ public class CompraDetalle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "idCompra", unique = true)
+    @Column(name = "idCompra")
     private Long idCompra;
 
     @Column(name = "idProducto")
@@ -27,7 +27,7 @@ public class CompraDetalle {
     private Float valorUnitario;
 
     @Column(name = "cantidad")
-    private Long cantidad;
+    private Integer cantidad;
 
     @Column(name = "valorTotal")
     private Float valorTotal;
